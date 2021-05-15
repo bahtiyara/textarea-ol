@@ -1,20 +1,24 @@
 import { useState } from "react"
-import TextareaAutosize from "react-autosize-textarea"
+// import TextareaAutosize from "react-autosize-textarea"
 import { Controlled as CodeMirror } from "react-codemirror2"
-import "./App.css"
 
 require("codemirror/lib/codemirror.css")
 require("codemirror/theme/material.css")
 require("codemirror/theme/neat.css")
 require("codemirror/mode/xml/xml.js")
 require("codemirror/mode/javascript/javascript.js")
+require("codemirror/addon/display/placeholder")
+require("./App.css")
 
 function TextareaOl() {
     const [value, setValue] = useState("")
     const options = {
         lineNumbers: true,
         lineWrapping: true,
-        lineNumberFormatter: lineNumberFormatter,
+        lineNumberFormatter,
+        tabSize: 0,
+        tabindex: 0,
+        placeholder: "输入图片 URL，一行一个",
     }
     return (
         // <div className="textarea-ol">
@@ -36,9 +40,6 @@ function TextareaOl() {
             onBeforeChange={(editor, data, value) => {
                 setValue(value)
             }}
-            onChange={(editor, data, value) => {
-                // console.log(value)
-            }}
         />
     )
 
@@ -46,12 +47,12 @@ function TextareaOl() {
         const arr = value.split("\n")
         var blankLine = 0
 
-        if (arr[line - 1] === "") {
+        if (arr[line - 1].replace(/\s/g, "") === "") {
             return ""
         }
 
         for (let i = 0; i < line - 1; i++) {
-            const element = arr[i]
+            const element = arr[i].replace(/\s/g, "")
             if (element === "") {
                 blankLine++
             }
@@ -61,9 +62,9 @@ function TextareaOl() {
     }
 }
 
-function handleChange(e, setValue) {
-    setValue(e.target.value)
-    console.log(e.target.value)
-}
+// function handleChange(e, setValue) {
+//     setValue(e.target.value)
+//     console.log(e.target.value)
+// }
 
 export default TextareaOl
